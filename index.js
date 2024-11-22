@@ -1,7 +1,8 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
-const route = require('./routes/authRoute');
+const authRoute = require('./routes/authRoute');
+const userRoute = require('./routes/userRoute');
 const connectDB = require('./config/db');
 
 const app = express();
@@ -12,7 +13,9 @@ const PORT = process.env.PORT || 3000;
 
 connectDB();
 
-app.use("/api/auth", route);
+app.use("/api/auth", authRoute);
+app.use("/api/users", userRoute)
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

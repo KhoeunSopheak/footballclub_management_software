@@ -21,6 +21,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    role: {
+      type: String,
+      required: true,
+      enum: ["admin", "user"]
+    },
   },
   {
     timestamps: true,
@@ -38,6 +43,6 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };
 
-const User = mongoose.model('User', userSchema);
+const register = mongoose.model('register', userSchema);
 
-module.exports = User;
+module.exports = register;
