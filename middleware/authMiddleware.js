@@ -12,17 +12,13 @@ const verifyToken = (requiredRole) => (req, res, next) => {
     }
 
     try {
-      // Verify the token
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = decoded;
 
-      // Check role
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = decoded; 
+      
       if (requiredRole && decoded.role !== requiredRole) {
         return res.status(403).json({ message: "Forbidden: Access denied" });
-      }
-
-      console.log("The decoded user is:", decoded);
-      next(); // Continue to the next middleware
+      } next();
     } catch (err) {
       return res.status(400).json({ message: "Token is not valid" });
     }
