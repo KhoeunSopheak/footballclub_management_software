@@ -5,6 +5,7 @@ const route = require('./routes/authRoute');
 const footballerroute = require('./routes/footballerRoute');
 
 const connectDB = require('./config/db');
+const ticketRouter = require('./routes/ticketRoute');
 
 const app = express();
 app.use(express.json());
@@ -15,6 +16,8 @@ const PORT = process.env.PORT || 3000;
 connectDB();
 
 app.use("/api/auth", route);
+ticket-api/feature
+app.use('/api', ticketRouter);
 app.use("/api", footballerroute);
 
 app.listen(PORT, () => {
