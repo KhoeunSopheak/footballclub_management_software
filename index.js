@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const route = require('./routes/authRoute');
 const footballerroute = require('./routes/footballerRoute');
+
 const connectDB = require('./config/db');
 
 const app = express();
