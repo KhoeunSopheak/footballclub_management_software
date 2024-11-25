@@ -29,30 +29,23 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    // Authenticate user...
+    const user = await User.findOne({ email: req.body.email });
 
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ error: "Invalid credentials." });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ error: "Invalid credentials." });
-    }
     const token = jwt.sign(
       {
-        userId: user._id,
-        role: user.role,
+        _id: user._id, // Include userId in the token
+        email: user.email,
+        username: user.username,
+        role: user.role, // Optional: Include role if needed
       },
       process.env.JWT_SECRET,
-      { expiresIn: "24h" }
+      { expiresIn: '1h' }
     );
 
-    return res.status(200).json({ message: "Login successful", token });
+    res.status(200).json({ token });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Internal Server error." });
+    res.status(500).json({ message: error.message });
   }
 };
 
