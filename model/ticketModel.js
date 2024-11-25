@@ -4,7 +4,7 @@ const ticketSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User', // Reference to the User model
+      ref: 'User', // Reference to User model
       required: true,
     },
     seatNumber: {
@@ -23,7 +23,6 @@ const ticketSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
 const Ticket = mongoose.model('Ticket', ticketSchema);
 
 module.exports = Ticket;

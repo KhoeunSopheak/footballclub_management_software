@@ -18,7 +18,6 @@ connectDB();
 
 app.use("/api", matchroute);
 app.use("/api/auth", route);
-ticket-api/feature
 app.use('/api', ticketRouter);
 app.use("/api", footballerroute);
 
