@@ -1,21 +1,27 @@
 const Ticket = require('../model/ticketModel');
 
-// Book a new ticket
 exports.bookTicket = async (req, res) => {
   try {
-    const { userId, seatNumber, price, status } = req.body;
+    const { seatNumber, price } = req.body;
+    const { _id } = req.user; // Extract userId from the token
 
-    const newTicket = new Ticket({
-      userId,
+    // Create a new ticket
+    const ticket = await Ticket.create({
+      userId: _id,
       seatNumber,
       price,
-      status,
+      status: 'booked',
     });
 
-    await newTicket.save();
-    res.status(201).json({ message: 'Ticket booked successfully', ticket: newTicket });
+    // Populate the userId field to include name and email
+    const populatedTicket = await Ticket.findById(ticket._id).populate('userId', 'username email');
+
+    res.status(201).json({
+      message: 'Ticket booked successfully',
+      ticket: populatedTicket,
+    });
   } catch (error) {
-    res.status(500).json({ message: 'Failed to book ticket', error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -45,20 +51,52 @@ exports.getTicketById = async (req, res) => {
   }
 };
 
-// Cancel a ticket
-exports.cancelTicket = async (req, res) => {
+// update a ticket
+exports.updateTicket = async (req, res) => {
   try {
-    const { id } = req.params;
+    const ticketId = req.params.id;
+    const { seatNumber, price, status } = req.body;
 
-    const ticket = await Ticket.findByIdAndUpdate(id, { status: 'canceled' }, { new: true });
+    // Find and update the ticket
+    const updatedTicket = await Ticket.findByIdAndUpdate(
+      ticketId,
+      { seatNumber, price, status }, // Include all fields to be updated
+      { new: true } // Return the updated document
+    );
 
+    if (!updatedTicket) {
+      return res.status(404).json({ message: 'Ticket not found' });
+    }
+
+    res.status(200).json({
+      message: 'Ticket updated successfully',
+      ticket: updatedTicket,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+// Delete ticket controller
+exports.deleteTicket = async (req, res) => {
+  try {
+    const ticketId = req.params.id;
+
+    // Check if the ticket exists
+    const ticket = await Ticket.findById(ticketId);
     if (!ticket) {
       return res.status(404).json({ message: 'Ticket not found' });
     }
 
-    res.status(200).json({ message: 'Ticket canceled successfully', ticket });
+    // Delete the ticket
+    await Ticket.findByIdAndDelete(ticketId);
+
+    res.status(200).json({
+      message: 'Ticket deleted successfully',
+    });
   } catch (error) {
-    res.status(500).json({ message: 'Failed to cancel ticket', error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 

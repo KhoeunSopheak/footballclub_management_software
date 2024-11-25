@@ -1,37 +1,28 @@
-// const express = require('express');
-// const ticketRouter = express.Router();  // Corrected here
-// const { bookTicket, getAllTickets, getTicketById, cancelTicket} = require('../controllers/ticketController');
-
-// ticketRouter.post('/bookTicket', bookTicket);
-// ticketRouter.get('/getAllTickets', getAllTickets);
-// ticketRouter.get('/getTicketById', getTicketById);
-// ticketRouter.put('/cancelTicket', cancelTicket);
-
-// module.exports = ticketRouter;
-
-
-
-
 const express = require('express');
 const {
   bookTicket,
   getAllTickets,
   getTicketById,
-  cancelTicket,
+  updateTicket,
+  deleteTicket,
 } = require('../controllers/ticketController');
+const verifyToken = require("../middleware/authMiddleware");
 
 const ticketRouter = express.Router();
 
 // Route for booking a ticket
-ticketRouter.post('/ticket', bookTicket);
+ticketRouter.post('/ticket',verifyToken ("user"), bookTicket);
 
 // Route for getting all tickets
-ticketRouter.get('/tickets', getAllTickets);
+ticketRouter.get('/tickets',verifyToken ("user", "admin"), getAllTickets);
 
 // Route for getting a ticket by ID
-ticketRouter.get('/tickets/:id', getTicketById);
+ticketRouter.get('/tickets/:id',verifyToken ("user","admin"), getTicketById);
 
-// Route for canceling a ticket
-ticketRouter.put('/tickets/:id', cancelTicket);
+// Route for update a ticket
+ticketRouter.put('/tickets/:id',verifyToken ("admin"), updateTicket);
+
+// Route for delete ticket
+ticketRouter.delete('/tickets/:id', verifyToken('admin'), deleteTicket);
 
 module.exports = ticketRouter;
