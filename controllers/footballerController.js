@@ -2,31 +2,30 @@ const Footballer = require('../model/footballerModel');
 
 const createFootballer = async (req, res) => {
     try {
-        const { name, age, position, team, stats, matches, goals, assists } = req.body;
+        const { full_name, position, nationality, dob, bio, avatar, created_by } = req.body;
         const newFootballer = new Footballer({
-            name,
-            age,
+            full_name,
             position,
-            team,
-            stats,
-            matches,
-            goals,
-            assists
+            nationality,
+            dob,
+            bio,
+            avatar,
+            created_by,
         });
-        const savedFootballer = await newFootballer.save();
+
+        const saveFootballer = await newFootballer.save();
 
         return res.status(201).json({ 
             message: 'Create successfully', 
             footballer: { 
-                id: savedFootballer._id, 
-                name, 
-                age, 
-                position, 
-                team, 
-                stats, 
-                matches, 
-                goals, 
-                assists 
+            id : saveFootballer._id,
+            full_name,
+            position,
+            nationality,
+            dob,
+            bio,
+            avatar,
+            created_by, 
             } 
         });
     } catch (error) {

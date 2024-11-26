@@ -16,7 +16,6 @@ const PORT = process.env.PORT || 3000;
 connectDB();
 
 app.use("/api/auth", route);
-ticket-api/feature
 app.use('/api', ticketRouter);
 app.use("/api", footballerroute);
 
