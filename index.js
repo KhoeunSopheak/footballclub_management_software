@@ -18,7 +18,7 @@ connectDB();
 
 app.use("/api", matchroute);
 app.use("/api/auth", route);
-app.use('/api', ticketRouter);
+app.use('/api/booking', ticketRouter);
 app.use("/api", footballerroute);
 
 app.listen(PORT, () => {
