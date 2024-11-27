@@ -13,6 +13,14 @@ const createFootballer = async (req, res) => {
             created_by,
         });
 
+        if (!full_name || !position || !nationality || !dob || !created_by) {
+        return res.status(400).json({ error: "Missing required fields" });
+        };
+        const existingFootballer = await Footballer.findOne(full_name);
+        if (existingFootballer) {
+            return res.status(409).json({ error: "Footballer already exists" });
+        };
+
         const saveFootballer = await newFootballer.save();
 
         return res.status(201).json({ 
@@ -36,6 +44,7 @@ const createFootballer = async (req, res) => {
 
 const getAllFootballer = async (req, res) => {
     try {
+        console.log(res);
         const footballers = await Footballer.find();
         return res.status(200).json({ message: 'Fetched footballer successfully' , footballers
         });
@@ -49,7 +58,13 @@ const getFootballerId = async (req, res) => {
     try {
         const id = req.params.id;
         const footballerId = await Footballer.findById(id);
-        return res.status(200).json(footballerId);
+        if (!footballerId) {
+            return res.status(404).json({ error: "Footballer not found" });
+        };
+
+        return res.status(200).json(
+            footballerId,
+        );
     } catch (error) {
         console.error(error);
         return res.status(5000).json({ error: 'Internal Server error'});
