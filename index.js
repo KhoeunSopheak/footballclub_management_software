@@ -18,11 +18,11 @@ connectDB();
 
 app.use("/api", matchroute);
 app.use("/api/auth", route);
-app.use('/api/booking', ticketRouter);
-app.use("/api", footballerroute);
+app.use('/api', ticketRouter);
+app.use("/api/football", footballerroute);
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on :${PORT}`);
 });
 
 
