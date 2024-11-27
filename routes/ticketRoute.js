@@ -4,7 +4,7 @@ const {
   getAllTickets,
   getTicketById,
   updateTicket,
-  deleteTicket,
+  deleteTicket
 } = require('../controllers/ticketController');
 const verifyToken = require("../middleware/authMiddleware");
 
