@@ -1,15 +1,53 @@
 const mongoose = require('mongoose');
 
 const footballerSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  age: { type: Number, required: true },
-  position: { type: String, required: true },
-  team: { type: String, required: true },
-  stats: {
-  matches: { type: Number, default: 0 },
-  goals: { type: Number, default: 0 },
-  assists: { type: Number, default: 0 },
+  full_name: {
+    type: String,
+    required: true,
   },
+  position: {
+    type: String,
+    default: null,
+  },
+  nationality: {
+    type: String,
+    default: null,
+  },
+  dob: {
+    type: Date,
+    default: null,
+  },
+  bio: {
+    type: String,
+    default: null,
+  },
+  avatar: {
+    type: String,
+    default: null,
+  },
+  created_by: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'User',
+  },
+  updated_by: {
+    type: mongoose.Schema.Types.ObjectId,
+    default: null,
+    ref: 'User',
+  },
+  created_at: {
+    type: Date,
+    default: Date.now, 
+  },
+  updated_at: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+footballerSchema.pre('save', function (next) {
+  this.updated_at = Date.now();
+  next();
 });
 
 const Footballer = mongoose.model('Footballer', footballerSchema);

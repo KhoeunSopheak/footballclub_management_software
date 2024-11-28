@@ -22,9 +22,8 @@ app.use("/api/users", userRoute);
 app.use("/api/auth", authRoute);
 app.use('/api/tickets', ticketRouter);
 app.use("/api", footballerroute);
-
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on :${PORT}`);
 });
 
 

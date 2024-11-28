@@ -2,31 +2,38 @@ const Footballer = require('../model/footballerModel');
 
 const createFootballer = async (req, res) => {
     try {
-        const { name, age, position, team, stats, matches, goals, assists } = req.body;
+        const { full_name, position, nationality, dob, bio, avatar, created_by } = req.body;
         const newFootballer = new Footballer({
-            name,
-            age,
+            full_name,
             position,
-            team,
-            stats,
-            matches,
-            goals,
-            assists
+            nationality,
+            dob,
+            bio,
+            avatar,
+            created_by,
         });
-        const savedFootballer = await newFootballer.save();
+
+        if (!full_name || !position || !nationality || !dob || !created_by) {
+        return res.status(400).json({ error: "Missing required fields" });
+        };
+        const existingFootballer = await Footballer.findOne(full_name);
+        if (existingFootballer) {
+            return res.status(409).json({ error: "Footballer already exists" });
+        };
+
+        const saveFootballer = await newFootballer.save();
 
         return res.status(201).json({ 
             message: 'Create successfully', 
             footballer: { 
-                id: savedFootballer._id, 
-                name, 
-                age, 
-                position, 
-                team, 
-                stats, 
-                matches, 
-                goals, 
-                assists 
+            id : saveFootballer._id,
+            full_name,
+            position,
+            nationality,
+            dob,
+            bio,
+            avatar,
+            created_by, 
             } 
         });
     } catch (error) {
@@ -37,6 +44,7 @@ const createFootballer = async (req, res) => {
 
 const getAllFootballer = async (req, res) => {
     try {
+        console.log(res);
         const footballers = await Footballer.find();
         return res.status(200).json({ message: 'Fetched footballer successfully' , footballers
         });
@@ -50,7 +58,13 @@ const getFootballerId = async (req, res) => {
     try {
         const id = req.params.id;
         const footballerId = await Footballer.findById(id);
-        return res.status(200).json(footballerId);
+        if (!footballerId) {
+            return res.status(404).json({ error: "Footballer not found" });
+        };
+
+        return res.status(200).json(
+            footballerId,
+        );
     } catch (error) {
         console.error(error);
         return res.status(5000).json({ error: 'Internal Server error'});
