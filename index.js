@@ -19,7 +19,7 @@ connectDB();
 app.use("/api", matchroute);
 app.use("/api/auth", route);
 app.use('/api', ticketRouter);
-app.use("/api/football", footballerroute);
+app.use("/api/soccer", footballerroute);
 
 app.listen(PORT, () => {
   console.log(`Server is running on :${PORT}`);
