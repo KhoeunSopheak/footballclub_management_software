@@ -15,8 +15,8 @@ const router = express.Router();
 
 // User routes
 
-router.get("/me", verifyToken("user"), GetUserProfile);
-router.put("/update-profile", verifyToken("user"), UpdateUser);
-router.delete("/delete-profile", verifyToken("user"), DeleteUser);
+router.get("/me", verifyToken("user", "admin"), GetUserProfile);
+router.put("/update-profile", verifyToken("user", "admin"), UpdateUser);
+router.delete("/delete-profile", verifyToken("user", "admin"), DeleteUser);
 
 module.exports = router;
