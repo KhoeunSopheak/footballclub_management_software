@@ -2,15 +2,14 @@ const Match = require("../model/Matches");
 
 // Create a new match
 exports.createMatch = async (req, res) => {
-  try {
-    // const { id, tittle, homeTeam , awayTeam , date , location, score } = req.body;
-    
+  try {    
     const match = await Match.create(req.body);
     res.status(201).json({ success: true, data: match });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
 
 // Get all matches
 exports.getMatches = async (req, res) => {
@@ -21,6 +20,7 @@ exports.getMatches = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
 
 // Get a match by ID
 exports.getMatchById = async (req, res) => {
